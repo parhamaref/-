@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cinzel", "Playfair Display", "Georgia", serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* Base text justification across all devices as requested by user */
+p, 
+.text-justify-all,
+.editorial-text,
+.prose,
+article p {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Ensure headings, buttons, tabular numbers, badges, and mono badges preserve their intended alignments */
+button p,
+.no-justify,
+.tabular-nums,
+h1, h2, h3, h4, h5, h6,
+.font-mono.text-center,
+.font-mono.text-right {
+  text-align: inherit;
+}
+
+/* Smooth fluid responsiveness and prevent mobile horizontal jank */
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+/* Custom CSS keyframes for our post-apocalyptic reveal nodes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideLeft {
+  animation: slideLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom range input styling */
+input[type="range"]::-webkit-slider-thumb {
+  border: 1px solid #FFFFFF;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #0E0E0E;
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  border: 1px solid #FFFFFF;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #0E0E0E;
+  cursor: pointer;
+}

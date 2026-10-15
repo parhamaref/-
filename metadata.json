@@ -1,0 +1,6 @@
+{
+  "name": "DANIEL’S MAISON",
+  "description": "DANIEL’S MAISON — Garments from the origin of civilization. Ecosystem archive of global luxury apparel and dynamic artifacts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
