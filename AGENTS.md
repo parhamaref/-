@@ -43,6 +43,25 @@ bun run lint       # tsc --noEmit
 - **`GEMINI_API_KEY` / `APP_URL`** in `.env.example` belong to the previous AI Studio project and are not used by
   Nestora; the app boots without them.
 
+## Hero film (scroll-scrubbed)
+
+`/public/hero/*` holds the homepage hero clip. `ScrollScrubHero` pins the hero for 260vh (mobile) / 300vh and maps
+scroll progress onto `video.currentTime` inside a rAF loop — the clip is never played, and nothing about the scroll is
+held in React state.
+
+If the clip is ever replaced, **re-encode it first**, or scrubbing will stutter: the original source had a single
+keyframe for its whole 10s, so every seek decoded from frame zero.
+
+```bash
+ffmpeg -i source.mp4 -an -vf scale=1280:720 -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
+  -g 6 -keyint_min 6 -sc_threshold 0 -movflags +faststart public/hero/nestora-hero-720.mp4
+# 854:480 / -crf 26 for the mobile file; a VP9 copy (-crf 34 -g 6) is the H.264-less fallback.
+# The poster is frame 0: ffmpeg -i nestora-hero-720.mp4 -frames:v 1 -q:v 4 public/hero/nestora-hero-poster.jpg
+```
+
+Keyframe every 6 frames (0.25s at 24fps), no audio track, `+faststart`, capped resolution. A keyframe-free or 1080p+
+export will seek poorly no matter how the JS is written.
+
 ## How to verify
 
 1. `curl -sI http://localhost:3000/` returns 200 and the dev server log shows live module compilation.
