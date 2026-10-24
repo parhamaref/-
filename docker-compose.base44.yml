@@ -1,0 +1,52 @@
+# Base44 sandbox/dev environment for DANIEL'S MAISON.
+#
+# The app is a purely client-side Vite + React SPA: every service in `src/services`
+# falls back to bundled mock data when `/api/v1` is unreachable, and nothing in the
+# source reads `GEMINI_API_KEY` at runtime. So a single dev-server service is enough;
+# there is no backend, database or external credential required to run the preview.
+#
+# Run from the repository root:
+#   docker compose -f docker-compose.base44.yml up -d --build
+services:
+  web:
+    # Plain runtime image + bind-mounted source, so edits are picked up by Vite's
+    # dev server without rebuilding the container.
+    image: oven/bun:1
+    working_dir: /app
+    # Dependencies live in a volume (not on the sandbox filesystem); install them
+    # from the committed bun.lock on startup, then exec the live-reload dev server.
+    command: ["sh", "-ec", "bun install --frozen-lockfile && exec bun run dev"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    environment:
+      # Sandbox-only flag, supplied by the platform. Vite gates dev assets/HMR on the
+      # request Host header; the platform sets this variable and Vite (>= 6.1) appends
+      # it to `server.allowedHosts`, which is required for the preview proxy host.
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+      # Bare passthrough: present as "1" in the sandbox, unset elsewhere. Application
+      # code branches on it only via an exact "1" comparison.
+      - BASE44_PREVIEW_MODE
+    healthcheck:
+      # Real responsiveness check against the dev server over HTTP.
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 180s
+    restart: on-failure
+    labels:
+      base44.project: DANIEL'S MAISON
+      base44.kind: web
+      base44.port: 3000
+
+volumes:
+  node_modules:
