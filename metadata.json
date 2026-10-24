@@ -1,6 +1,6 @@
 {
-  "name": "DANIEL’S MAISON",
-  "description": "DANIEL’S MAISON — Garments from the origin of civilization. Ecosystem archive of global luxury apparel and dynamic artifacts.",
+  "name": "NESTORA HOMES",
+  "description": "NESTORA HOMES — premium luxury residential real estate discovery, property marketing and personalised consultation.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
